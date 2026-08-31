@@ -12,7 +12,7 @@ provider "aws" {
       CreatedBy = "Harbormaster"
       Blueprint = "Spring Boot 3.5"
       DomainModel = "Banking Industry Domain Model"
-      CertificationId = "9d050067-a8ee-46aa-9dec-ebb1f303c18e"
+      CertificationId = "76d3ce4d-7cee-4c98-bb7a-e3998a164485"
     }
   }
 }
@@ -39,7 +39,7 @@ resource "local_file" "private_key_pem" {
 }
 
 resource "aws_key_pair" "generated" {
-  key_name   = "pjsk-sshtest-0.6411177138045961"
+  key_name   = "pjsk-sshtest-0.17395826931675884"
   public_key = tls_private_key.generated.public_key_openssh
 
   lifecycle {
@@ -109,7 +109,7 @@ resource "aws_security_group" "web" {
 # -------------------------------------------------------
 
 resource "aws_security_group" "db" {
-  description = "security group for bankingbackend mysql created from terraform"
+  description = "security group for bankingbackend and mysql created from terraform"
   vpc_id      = aws_vpc.default.id
 
   # mysql access from anywhere
@@ -149,14 +149,14 @@ resource "aws_iam_role" "eks" {
   name = "eks-cluster-role"
 
   assume_role_policy = jsonencode({
-  Version = "2012-10-17"
-  Statement = [{
-  Effect = "Allow"
-  Principal = {
-  Service = "eks.amazonaws.com"
-  }
-  Action = "sts:AssumeRole"
-  }]
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "eks.amazonaws.com"
+      }
+     Action = "sts:AssumeRole"
+    }]
   })
 }
 
@@ -165,7 +165,7 @@ resource "aws_eks_cluster" "this" {
   role_arn = aws_iam_role.eks.arn
 
   vpc_config {
-    subnet_ids = aws_subnet.default.id
+    subnet_ids = [aws_subnet.default.id]
   }
 }
 
